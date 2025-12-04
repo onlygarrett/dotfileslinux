@@ -1,0 +1,142 @@
+[env]
+WINIT_X11_SCALE_FACTOR = "1.0"
+PROMPT_TOOLKIT_COLOR_DEPTH = "DEPTH_24_BIT"
+TERM = "xterm-256color"
+
+[general]
+import = [
+  "/home/jee/.config/alacritty/themes/rose-pine.toml"
+]
+live_config_reload = true
+
+[terminal.shell]
+program = "/usr/bin/zsh"
+
+[bell]
+animation = "EaseOutExpo"
+duration = 0
+
+[cursor]
+blink_interval = 500
+blink_timeout = 5
+unfocused_hollow = false
+
+[cursor.style]
+blinking = "Off"
+shape = "Block"
+
+[font]
+size = 22
+
+[font.bold]
+family = "JetBrainsMono Nerd Font"
+style = "Bold"
+
+[font.glyph_offset]
+x = 0
+y = 0
+
+[font.italic]
+family = "JetBrainsMono Nerd Font"
+style = "Italic"
+
+[font.normal]
+family = "JetBrainsMono Nerd Font"
+style = "Regular"
+
+[font.offset]
+x = 0
+y = 0
+
+[mouse]
+hide_when_typing = true
+
+[[mouse.bindings]]
+action = "PasteSelection"
+mouse = "Middle"
+
+[selection]
+semantic_escape_chars = ",│`|:\"' ()[]{}<>"
+save_to_clipboard = true
+
+[window]
+title = "Hacker Man"
+decorations = "none"
+dynamic_title = true
+dynamic_padding = false
+opacity = 0.9
+blur = true
+startup_mode = "Windowed"
+
+[window.dimensions]
+columns = 160
+lines = 80
+
+[window.padding]
+x = 8
+y = 8
+
+# Removed window.position - let Hyprland handle it
+# [window.position]
+# x = 1
+# y = 1
+
+[window.class]
+instance = "Alacritty"
+general = "Alacritty"
+
+[[keyboard.bindings]]
+key = "V"
+mods = "Control|Shift"
+action = "Paste"
+
+[[keyboard. bindings]]
+key = "C"
+mods = "Control|Shift"
+action = "Copy"
+
+[[keyboard.bindings]]
+key = "PageUp"
+mods = "None"
+action = "ScrollPageUp"
+mode = "~Alt"
+
+[[keyboard.bindings]]
+key = "PageDown"
+mods = "None"
+action = "ScrollPageDown"
+mode = "~Alt"
+
+[[keyboard.bindings]]
+key = "Home"
+mods = "Shift"
+action = "ScrollToTop"
+mode = "~Alt"
+
+[[keyboard.bindings]]
+key = "End"
+mods = "Shift"
+action = "ScrollToBottom"
+mode = "~Alt"
+
+[[keyboard.bindings]]
+key = "N"
+mods = "Control"
+action = "SpawnNewInstance"
+
+[[keyboard.bindings]]
+key = "Space"
+mods = "Control"
+chars = "\u0000"
+
+[[keyboard.bindings]]
+key = "Plus"
+mods = "Control"
+action = "IncreaseFontSize"
+
+[[keyboard. bindings]]
+key = "Minus"
+mods = "Control"
+action = "DecreaseFontSize"
+
+[terminal]

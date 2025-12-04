@@ -1,0 +1,50 @@
+# Backup files
+*.bak
+*.backup
+*~
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+. DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Editor files
+*. sublime-project
+*.sublime-workspace
+. vscode/
+.idea/
+
+# Private/sensitive files
+**/*_private
+**/*_secret
+**/*. key
+**/*.pem
+. ssh/id_*
+.ssh/*. pem
+.ssh/known_hosts
+
+# Vim
+*.un~
+. netrwhist
+
+# Compiled files
+*.pyc
+*. class
+*. o
+
+# Logs
+*.log
+
+# Local configuration overrides
+*.local
+
+# Cache directories
+__pycache__/
+. cache/
+

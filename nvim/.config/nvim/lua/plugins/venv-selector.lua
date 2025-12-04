@@ -1,0 +1,30 @@
+-- ~/.config/nvim/lua/plugins/venv-selector.lua
+return {
+  "linux-cultist/venv-selector.nvim",
+  dependencies = {
+    "neovim/nvim-lspconfig",
+    { "nvim-telescope/telescope.nvim", branch = "0.1.x", dependencies = { "nvim-lua/plenary.nvim" } },
+  },
+  lazy = false,
+  branch = "main", -- required branch
+  config = function()
+    local ok, venv_selector = pcall(require, "venv-selector")
+    if not ok then
+      vim.notify("venv-selector.nvim not found", vim.log.levels.ERROR)
+      return
+    end
+
+    venv_selector.setup({
+      -- ✅ Always provide a table, even if you just use defaults
+      name = "venv",
+      auto_refresh = true, -- automatically refreshes venv list
+      search = true, -- search parent folders for virtualenvs
+      dap_enabled = true, -- if you use nvim-dap
+      notify_user_on_venv_activation = true,
+      -- add other opts here if needed
+    })
+  end,
+  keys = {
+    { ",v", "<cmd>VenvSelect<cr>", desc = "Select VirtualEnv" },
+  },
+}
