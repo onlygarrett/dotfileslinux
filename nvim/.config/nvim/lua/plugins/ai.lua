@@ -1,7 +1,10 @@
 -- ~/.config/nvim/lua/plugins/ai.lua
-return {
 
+return {
+  -- Keep using LazyVim's Copilot extra
   { import = "lazyvim.plugins.extras.ai.copilot" },
+
+  -- Copilot core plugin
   {
     "zbirenbaum/copilot.lua",
     event = "InsertEnter",
@@ -9,6 +12,7 @@ return {
       suggestion = {
         enabled = true,
         auto_trigger = true,
+        -- If you decide to re-enable keymaps, you can uncomment below:
         -- keymap = {
         --   accept = "<M-CR>",
         --   accept_line = "<M-l>",
@@ -22,7 +26,29 @@ return {
     keys = {
       { "<leader>cI", "<cmd>Copilot toggle<cr>", desc = "Toggle IA (Copilot)" },
     },
+    -- Important: make sure copilot-cmp initializes after copilot.lua
+    dependencies = {
+      {
+        "zbirenbaum/copilot-cmp",
+        -- Explicit setup to guarantee source registration
+        config = function()
+          local ok, copilot_cmp = pcall(require, "copilot_cmp")
+          if not ok then
+            return
+          end
+          copilot_cmp.setup({
+            method = "getCompletionsCycling",
+            -- Use default formatters; you can tweak to avoid duplicate insert text
+            formatters = {
+              insert_text = require("copilot_cmp.format").remove_existing,
+            },
+          })
+        end,
+      },
+    },
   },
+
+  -- CopilotChat - keep your existing customizations
   {
     "CopilotC-Nvim/CopilotChat.nvim",
     opts = function(_, opts)
