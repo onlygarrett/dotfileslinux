@@ -4,9 +4,7 @@ PROMPT_TOOLKIT_COLOR_DEPTH = "DEPTH_24_BIT"
 TERM = "xterm-256color"
 
 [general]
-import = [
-  "/home/jee/.config/alacritty/themes/rose-pine.toml"
-]
+import = ["/home/jee/.config/alacritty/themes/rose-pine.toml"]
 live_config_reload = true
 
 [terminal.shell]
@@ -90,7 +88,7 @@ key = "V"
 mods = "Control|Shift"
 action = "Paste"
 
-[[keyboard. bindings]]
+[[keyboard.bindings]]
 key = "C"
 mods = "Control|Shift"
 action = "Copy"
@@ -120,11 +118,6 @@ action = "ScrollToBottom"
 mode = "~Alt"
 
 [[keyboard.bindings]]
-key = "N"
-mods = "Control"
-action = "SpawnNewInstance"
-
-[[keyboard.bindings]]
 key = "Space"
 mods = "Control"
 chars = "\u0000"
@@ -134,7 +127,7 @@ key = "Plus"
 mods = "Control"
 action = "IncreaseFontSize"
 
-[[keyboard. bindings]]
+[[keyboard.bindings]]
 key = "Minus"
 mods = "Control"
 action = "DecreaseFontSize"
