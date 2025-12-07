@@ -69,6 +69,7 @@ alias lr='eza -alg --sort=modified --color=always --group-directories-first --gi
 alias ide='bash ~/.config/scripts/__tmux_ide.sh'
 alias vh="nvim"
 alias lg="lazygit"
+alias ld="sudo lazydocker"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias python='/usr/bin/python3'
 

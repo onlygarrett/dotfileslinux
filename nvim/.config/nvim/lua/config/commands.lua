@@ -45,6 +45,8 @@ r.noremap("n", "<leader>tf", "<cmd>tabnew %<CR>", "Open current buffer in new ta
 -- functions/commands
 -- remove trailing white space
 f.cmd("Nows", "%s/\\s\\+$//e", { desc = "remove trailing whitespace" })
+-- extract zip file
+f.cmd("ExtractZip", "lua require('config.functions').extract_zip(<f-args>)", { nargs = 1, desc = "Extract zip file" })
 
 -- remove blank lines
 f.cmd("Nobl", "g/^\\s*$/d", { desc = "remove blank lines" })
