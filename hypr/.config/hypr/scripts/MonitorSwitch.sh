@@ -3,8 +3,8 @@
 # Automatically switch between laptop and external monitor based on lid state
 
 # CONFIGURATION - Set your desired scale for external monitor here
-EXTERNAL_SCALE="1.3333334" # Change this value (1.0 = 100%, 1.5 = 150%, 2.0 = 200%, etc.)
-LAPTOP_SCALE="1.0"         # Scale for laptop screen
+EXTERNAL_SCALE="1.6" # Change this value (1.0 = 100%, 1.5 = 150%, 2.0 = 200%, etc.)
+LAPTOP_SCALE="1.0"   # Scale for laptop screen
 
 # Get lid state
 LID_STATE=$(cat /proc/acpi/button/lid/LID0/state 2>/dev/null | awk '{print $2}')
