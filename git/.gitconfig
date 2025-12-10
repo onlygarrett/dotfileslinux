@@ -7,3 +7,5 @@
 [user]
 	email = rumschik.2@gmail.com
 	name = Garrett Rumschik
+[credential]
+	helper = store
