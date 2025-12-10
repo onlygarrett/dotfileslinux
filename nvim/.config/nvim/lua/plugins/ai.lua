@@ -24,12 +24,6 @@ local function copilot_runtime_checks()
       vim.notify(("Copilot init: status=%s auth=%s"):format(st, authed), vim.log.levels.INFO)
     end)
   else
-    vim.schedule(function()
-      vim.notify(
-        "Copilot status API not available yet; it will be accessible after initialization.",
-        vim.log.levels.WARN
-      )
-    end)
   end
 
   -- Informative: report current buffer filetype

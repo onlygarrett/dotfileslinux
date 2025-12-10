@@ -95,3 +95,4 @@ eval "$(zoxide init zsh)"
 . "$HOME/.atuin/bin/env"
 
 eval "$(atuin init zsh)"
+export PATH=$PATH:$HOME/go/bin

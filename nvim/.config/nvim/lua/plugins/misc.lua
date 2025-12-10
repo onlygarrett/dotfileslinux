@@ -193,5 +193,12 @@ return {
         "flake8",
       },
     },
+    {
+      "saghen/snacks.nvim",
+      lazy = true,
+      config = function()
+        require("snacks").setup()
+      end,
+    },
   },
 }

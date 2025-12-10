@@ -1,2 +1,13 @@
 gpu:
-  layers: 50
+  layers: 60
+  power_saving: false
+  tensor_split: [1]
+  cuda: true
+server:
+  keep_alive: "2h"
+models:
+  use_mmap: true
+  use_mlock: true
+  num_threads: 12
+  kv_cache:
+    max_size: "8GB"
