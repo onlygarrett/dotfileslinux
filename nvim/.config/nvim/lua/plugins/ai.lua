@@ -34,7 +34,7 @@ local function copilot_runtime_checks()
 end
 
 return {
-  { import = "lazyvim.plugins.extras.ai.copilot" },
+  -- { import = "lazyvim.plugins.extras.ai.copilot" },
 
   {
     "zbirenbaum/copilot.lua",
@@ -60,6 +60,7 @@ return {
     },
     keys = {
       { "<leader>cI", "<cmd>Copilot toggle<cr>", desc = "Toggle IA (Copilot)" },
+      { "<leader>ae", "<cmd>CopilotChatToggle<cr>", desc = "Toggle Chat (Copilot)" },
     },
     dependencies = {
       -- keep copilot-cmp as a dependency but DO NOT configure it here
@@ -115,7 +116,41 @@ return {
           end
           return files
         end,
+        open_buffers = function()
+          local bufs = {}
+          for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+            if vim.api.nvim_buf_is_loaded(buf) and vim.api.nvim_buf_get_option(buf, "modifiable") then
+              local name = vim.api.nvim_buf_get_name(buf)
+              if name ~= "" then
+                table.insert(bufs, name)
+              end
+            end
+          end
+          return bufs
+        end,
+        git_status = function()
+          local handle = io.popen("git status --porcelain")
+          local status = {}
+          if handle then
+            for line in handle:lines() do
+              table.insert(status, line)
+            end
+            handle:close()
+          end
+          return status
+        end,
       })
+      opts.window = {
+        border = "rounded",
+        width = 80,
+        height = 20,
+      }
+      opts.keymaps = {
+        close = "<Esc>",
+        submit = "<C-CR>",
+        next_context = "<Tab>",
+        prev_context = "<S-Tab>",
+      }
       return opts
     end,
     config = function(_, opts)
@@ -126,6 +161,12 @@ return {
           require("CopilotChat.context").set_context("cwd_files")
         end,
       })
+      vim.api.nvim_create_user_command("CopilotChatContextOpenBuffers", function()
+        require("CopilotChat.context").set_context("open_buffers")
+      end, {})
+      vim.api.nvim_create_user_command("CopilotChatContextGitStatus", function()
+        require("CopilotChat.context").set_context("git_status")
+      end, {})
     end,
   },
 }
