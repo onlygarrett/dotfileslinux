@@ -137,7 +137,6 @@ return {
 
     -- Disable automatic suggestions (set to false)
     opts.autocomplete = false
-    
     -- Optional: Avoid ghost_text conflicts (Copilot ghost text handled by copilot.lua)
     opts.experimental = opts.experimental or {}
     if opts.experimental.ghost_text == nil then
