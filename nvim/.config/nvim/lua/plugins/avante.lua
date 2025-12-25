@@ -90,7 +90,7 @@ return {
     ---------------------------------------------------------------------------
     behaviour = {
       auto_suggestions = false,
-      auto_apply_diff_after_generation = true,
+      auto_apply_diff_after_generation = false,
       support_paste_from_clipboard = true,
       minimize_diff = false,
     },

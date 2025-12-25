@@ -48,3 +48,7 @@ Thumbs.db
 __pycache__/
 . cache/
 
+# aider cache
+.aider.tags.cache.v4
+.aider.chat.history.md
+.aider.input.history

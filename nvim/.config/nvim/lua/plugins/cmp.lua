@@ -15,7 +15,7 @@ end
 local function add_or_replace_comparator(comparators, comparator_fn, key)
   -- If a comparator with the same identity exists, replace it; otherwise insert at head.
   local inserted = false
-  for i, c in ipairs(comparators or {}) do
+  for i, _ in ipairs(comparators or {}) do
     -- We can't easily compare functions by value; just insert at the front to ensure priority.
     -- If you prefer a specific spot, you can adjust index logic here.
   end
@@ -64,7 +64,6 @@ end
 
 return {
   "hrsh7th/nvim-cmp",
-  -- Use opts mutator to merge into existing LazyVim cmp config instead of replacing it
   opts = function(_, opts)
     local cmp = require("cmp")
     local ok_prior, coprior = pcall(require, "copilot_cmp.comparators")
@@ -75,8 +74,10 @@ return {
       { name = "buffer", group_index = 2 },
     }))
 
-    -- Disable preselection to avoid accidental accepts
+    -- Disable preselection and enforce noselect in completeopt
     opts.preselect = cmp.PreselectMode.None
+    opts.completion = opts.completion or {}
+    opts.completion.completeopt = "menu,menuone,noinsert,noselect"
 
     -- Merge sorting comparators with copilot prioritizer at the front
     opts.sorting = opts.sorting or {}
@@ -103,95 +104,19 @@ return {
     opts.window.completion = opts.window.completion or cmp.config.window.bordered()
     opts.window.documentation = opts.window.documentation or cmp.config.window.bordered()
 
-    -- Preserve your mappings; if mappings are already present, keep them
-    opts.mapping = opts.mapping
-      or cmp.mapping.preset.insert({
-        ["<C-j>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
-        ["<C-k>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
-        ["<C-b>"] = cmp.mapping.scroll_docs(-4),
-        ["<C-f>"] = cmp.mapping.scroll_docs(4),
-        ["<C-Space>"] = cmp.mapping.complete(),
-        ["<C-e>"] = cmp.mapping.abort(),
-        ["<CR>"] = cmp.mapping.confirm({ select = false }),
-      })
-
-    -- Add simple formatting to show [AI] for copilot items; keeps existing formatting if present
-    local original_format = opts.formatting and opts.formatting.format
-    opts.formatting = opts.formatting or {}
-    opts.formatting.format = function(entry, vim_item)
-      local menu = {
-        copilot = "[AI]",
-        nvim_lsp = "[LSP]",
-        buffer = "[Buf]",
-        path = "[Path]",
-        cmdline = "[Cmd]",
-        luasnip = "[Snip]",
-      }
-      vim_item.menu = menu[entry.source.name] or ("[" .. entry.source.name .. "]")
-      if original_format then
-        -- Let any existing formatter run after we tag the menu
-        vim_item = original_format(entry, vim_item) or vim_item
-      end
-      return vim_item
-    end
-
-    -- Disable automatic suggestions (set to false)
-    opts.autocomplete = false
-    
-    -- Fix: Ensure no auto-selection behavior by explicitly setting navigation mappings
-    if opts.mapping then
-      local new_mapping = {}
-      for key, mapping in pairs(opts.mapping) do
-        if key == "<C-j>" or key == "<C-k>" then
-          -- Replace with non-selecting mappings (but keep the navigation)
-          -- Use Insert behavior instead of Select to prevent auto-selection
-          new_mapping[key] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert })
-        else
-          new_mapping[key] = mapping
-        end
-      end
-      opts.mapping = new_mapping
-    end
-
-    -- Fix: Also ensure that the default select mappings don't cause selection
-    -- Create a custom mapping for navigation without auto-selection
-    local custom_mappings = {
-      ["<C-j>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
-      ["<C-k>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
-      ["<C-b>"] = cmp.mapping.scroll_docs(-4),
-      ["<C-f>"] = cmp.mapping.scroll_docs(4),
-      ["<C-Space>"] = cmp.mapping.complete(),
-      ["<C-e>"] = cmp.mapping.abort(),
+    -- Safer mappings: confirm does NOT auto-select the first item
+    opts.mapping = vim.tbl_extend("force", opts.mapping or {}, {
       ["<CR>"] = cmp.mapping.confirm({ select = false }),
-    }
-    
-    -- Merge with existing mappings, preferring custom ones
-    if opts.mapping then
-      for key, mapping in pairs(custom_mappings) do
-        opts.mapping[key] = mapping
-      end
-    else
-      opts.mapping = custom_mappings
-    end
+      ["<C-y>"] = cmp.mapping.confirm({ select = false }),
+    })
 
-    -- Optional: Avoid ghost_text conflicts (Copilot ghost text handled by copilot.lua)
-    opts.experimental = opts.experimental or {}
-    if opts.experimental.ghost_text == nil then
-      opts.experimental.ghost_text = false
-    end
+    -- Optional: make <Tab> and <S-Tab> behave sanely with no auto-select
+    opts.mapping["<Tab>"] = opts.mapping["<Tab>"]
+      or cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select })
+    opts.mapping["<S-Tab>"] = opts.mapping["<S-Tab>"]
+      or cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select })
 
-    -- Register debug command
+    -- Install debug command
     setup_debug_command()
   end,
-
-  dependencies = {
-    "hrsh7th/cmp-nvim-lsp",
-    "hrsh7th/cmp-buffer",
-    "hrsh7th/cmp-path",
-    "hrsh7th/cmp-cmdline",
-    "zbirenbaum/copilot-cmp",
-  },
-
-  -- Let LazyVim decide event timing; you used VeryLazy before. Keeping it is fine.
-  event = "VeryLazy",
 }
