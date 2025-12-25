@@ -1,4 +1,6 @@
 vim.cmd("let g:netrw_liststyle = 3")
+-- vim.cmd("let g:copilot_no_tab_map = v:true")
+-- vim.cmd('imap <silent><script><expr> <C-Space> copilot#Accept("<CR>")')
 
 local opt = vim.opt
 

@@ -42,7 +42,7 @@ return {
     opts = {
       suggestion = {
         enabled = true,
-        auto_trigger = true,
+        auto_trigger = false,
       },
       -- Liberal filetype defaults: enabled everywhere unless explicitly turned off
       filetypes = {

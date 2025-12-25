@@ -75,6 +75,9 @@ return {
       { name = "buffer", group_index = 2 },
     }))
 
+    -- Disable preselection to avoid accidental accepts
+    opts.preselect = cmp.PreselectMode.None
+
     -- Merge sorting comparators with copilot prioritizer at the front
     opts.sorting = opts.sorting or {}
     opts.sorting.priority_weight = opts.sorting.priority_weight or 2
