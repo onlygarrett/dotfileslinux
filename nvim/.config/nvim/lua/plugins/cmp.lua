@@ -137,7 +137,6 @@ return {
 
     -- Disable automatic suggestions (set to false)
     opts.autocomplete = false
-    
     -- Ensure no auto-selection behavior by explicitly setting select behavior for navigation
     if opts.mapping then
       -- Remove any default selection behaviors that might cause auto-select
