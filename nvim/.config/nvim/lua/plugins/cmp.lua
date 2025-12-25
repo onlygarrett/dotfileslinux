@@ -137,6 +137,22 @@ return {
 
     -- Disable automatic suggestions (set to false)
     opts.autocomplete = false
+    
+    -- Ensure no auto-selection behavior by explicitly setting select behavior for navigation
+    if opts.mapping then
+      -- Remove any default selection behaviors that might cause auto-select
+      local new_mapping = {}
+      for key, mapping in pairs(opts.mapping) do
+        if key == "<C-j>" or key == "<C-k>" then
+          -- Replace with non-selecting mappings (but keep the navigation)
+          new_mapping[key] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert })
+        else
+          new_mapping[key] = mapping
+        end
+      end
+      opts.mapping = new_mapping
+    end
+
     -- Optional: Avoid ghost_text conflicts (Copilot ghost text handled by copilot.lua)
     opts.experimental = opts.experimental or {}
     if opts.experimental.ghost_text == nil then
