@@ -137,19 +137,41 @@ return {
 
     -- Disable automatic suggestions (set to false)
     opts.autocomplete = false
-    -- Ensure no auto-selection behavior by explicitly setting select behavior for navigation
+    
+    -- Fix: Ensure no auto-selection behavior by explicitly setting navigation mappings
     if opts.mapping then
-      -- Remove any default selection behaviors that might cause auto-select
       local new_mapping = {}
       for key, mapping in pairs(opts.mapping) do
         if key == "<C-j>" or key == "<C-k>" then
           -- Replace with non-selecting mappings (but keep the navigation)
+          -- Use Insert behavior instead of Select to prevent auto-selection
           new_mapping[key] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert })
         else
           new_mapping[key] = mapping
         end
       end
       opts.mapping = new_mapping
+    end
+
+    -- Fix: Also ensure that the default select mappings don't cause selection
+    -- Create a custom mapping for navigation without auto-selection
+    local custom_mappings = {
+      ["<C-j>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
+      ["<C-k>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
+      ["<C-b>"] = cmp.mapping.scroll_docs(-4),
+      ["<C-f>"] = cmp.mapping.scroll_docs(4),
+      ["<C-Space>"] = cmp.mapping.complete(),
+      ["<C-e>"] = cmp.mapping.abort(),
+      ["<CR>"] = cmp.mapping.confirm({ select = false }),
+    }
+    
+    -- Merge with existing mappings, preferring custom ones
+    if opts.mapping then
+      for key, mapping in pairs(custom_mappings) do
+        opts.mapping[key] = mapping
+      end
+    else
+      opts.mapping = custom_mappings
     end
 
     -- Optional: Avoid ghost_text conflicts (Copilot ghost text handled by copilot.lua)
