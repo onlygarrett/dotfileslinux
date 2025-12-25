@@ -4,7 +4,7 @@ PROMPT_TOOLKIT_COLOR_DEPTH = "DEPTH_24_BIT"
 TERM = "xterm-256color"
 
 [general]
-import = ["/home/jee/.config/alacritty/themes/rose-pine.toml"]
+import = ["/home/jee/.config/alacritty/themes/tokyo-night.toml"]
 live_config_reload = true
 
 [terminal.shell]

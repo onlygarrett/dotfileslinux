@@ -8,3 +8,5 @@ fi
 # User specific environment and startup programs
 
 . "$HOME/.atuin/bin/env"
+
+. "$HOME/.config/local/share/../bin/env"

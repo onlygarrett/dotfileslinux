@@ -26,7 +26,7 @@ require("lazy").setup({
     {
       import = "plugins",
     }, -- Your personal plugins
-    { import = "plugins.colorschemes" },
+    -- { import = "plugins.colorschemes" },
   },
   defaults = {
     lazy = false,

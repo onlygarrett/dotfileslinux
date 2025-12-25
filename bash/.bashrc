@@ -29,3 +29,5 @@ unset rc
 [[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh
 eval "$(atuin init bash)"
 export CUDA_HOME=/usr
+
+. "$HOME/.config/local/share/../bin/env"

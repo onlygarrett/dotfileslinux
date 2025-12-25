@@ -1,0 +1,4 @@
+FROM qwen2.5-coder:14b
+# Set context to 16k or 32k. 16k is a sweet spot for 12GB VRAM.
+PARAMETER temperature 0
+PARAMETER num_ctx 16384

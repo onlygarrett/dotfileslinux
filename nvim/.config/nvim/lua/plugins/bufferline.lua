@@ -16,9 +16,9 @@ return {
     },
     config = function()
       local bufferline = require("bufferline")
-      local highlights = require("rose-pine.plugins.bufferline")
+      -- local highlights = require("rose-pine.plugins.bufferline")
       bufferline.setup({
-        highlights = highlights,
+        -- highlights = highlights,
         options = {
           close_command = function(n)
             require("mini.bufremove").delete(n, false)

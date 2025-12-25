@@ -12,4 +12,6 @@ export OLLAMA_MODELS="$HOME/.ollama/models"
 export HISTFILE="$HOME/.zsh_history"    # History filepath
 export HISTSIZE=10000                   # Maximum events for internal history
 export SAVEHIST=10000                   # Maximum events in history file
-
+# export HTTP_PROXY=http://proxy.host:3128
+# export HTTPS_PROXY=http://proxy.host:3128
+# export NO_PROXY=127.0.0.1,localhost,::1
