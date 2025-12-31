@@ -2,37 +2,6 @@
 -- Deterministic Copilot + copilot-cmp initialization and CopilotChat config,
 -- ensuring copilot-cmp is set up AFTER Copilot is initialized to avoid race conditions.
 
-local function copilot_runtime_checks()
-  -- Node availability check (best-effort; will not block)
-  local node = vim.fn.exepath("node")
-  if node == "" then
-    vim.schedule(function()
-      vim.notify(
-        "Copilot requires Node.js but none was found in PATH. Install Node and restart Neovim.",
-        vim.log.levels.ERROR
-      )
-    end)
-  end
-
-  -- Copilot status check: only if API exists
-  local ok_cp, copilot = pcall(require, "copilot")
-  if ok_cp and copilot and type(copilot.status) == "table" then
-    local s = copilot.status.data or {}
-    local authed = (s.authenticated and "yes") or "no"
-    local st = s.status or "unknown"
-    vim.schedule(function()
-      vim.notify(("Copilot init: status=%s auth=%s"):format(st, authed), vim.log.levels.INFO)
-    end)
-  else
-  end
-
-  -- Informative: report current buffer filetype
-  local ft = vim.bo.filetype or ""
-  vim.schedule(function()
-    vim.notify(("Current buffer filetype: '%s'"):format(ft), vim.log.levels.INFO)
-  end)
-end
-
 return {
   -- { import = "lazyvim.plugins.extras.ai.copilot" },
 
@@ -85,11 +54,6 @@ return {
           vim.notify("copilot-cmp not found; Copilot CMP integration will be disabled", vim.log.levels.WARN)
         end)
       end
-
-      -- 3) Finally, run runtime checks; schedule to allow init to complete
-      vim.schedule(function()
-        copilot_runtime_checks()
-      end)
     end,
   },
 }

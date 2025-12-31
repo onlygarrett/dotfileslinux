@@ -95,6 +95,15 @@ eval "$(zoxide init zsh)"
 . "$HOME/.atuin/bin/env"
 
 eval "$(atuin init zsh)"
+
+# pyenv
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+
 export PATH=$PATH:$HOME/.cargo/bin:$HOME/go/bin
 
 . "$HOME/.config/local/share/../bin/env"
+
+# opencode
+export PATH=/home/jee/.opencode/bin:$PATH
