@@ -6,7 +6,7 @@
 	font-weight: bold;
 	min-height: 0;
 	/* set font-size to 100% if font scaling is set to 1.00 using nwg-look */
-	font-size: 97%;
+	font-size: 92%;
 	font-feature-settings: '"zero", "ss01", "ss02", "ss03", "ss04", "ss05", "cv31"';
 }
 
@@ -20,14 +20,14 @@ window#waybar {
 }
 
 window#waybar.hidden {
-  	opacity: 0.2;
+  	opacity: 0.1;
 }
 
 window#waybar.empty,
 window#waybar.empty #window {
     background-color: transparent;
     padding: 0px;
-    border: 0px;
+    border: 5px;
 }
 
 #taskbar button,

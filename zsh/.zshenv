@@ -3,6 +3,7 @@ export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$XDG_CONFIG_HOME/local/share"
 export XDG_CACHE_HOME="$XDG_CONFIG_HOME/cache"
 export OLLAMA_MODELS="$HOME/.ollama/models"
+export SUDOEDITOR="nvim"
 # export ZSH_TMUX_CONFIG="$XDG_CONFIG_HOME/tmux/tmux.conf"
 # export RIPGREP_CONFIG_PATH="$HOME/.config/ripgrep/config"
 # export PATH=$PATH:$HOME/.luarocks/bin:

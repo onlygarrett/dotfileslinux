@@ -72,6 +72,7 @@ alias lg="lazygit"
 alias ld="sudo lazydocker"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias python='/usr/bin/python3'
+# alias y='yazi'
 
 # fzf
 export FZF_DEFAULT_COMMAND='fd --type file --color=always --follow --hidden --exclude .git'
