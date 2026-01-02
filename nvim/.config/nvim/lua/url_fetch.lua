@@ -1,16 +1,16 @@
-vim.api.nvim_create_user_command("FetchURL", function(opts)
-  local url = opts.args
-  if url == "" then
-    print("Usage: :FetchURL https://example.com")
-    return
-  end
-  local tmp = vim.fn.tempname()
-  -- Uses env HTTP_PROXY/HTTPS_PROXY automatically
-  local cmd = { "curl", "-L", "-sS", "-D", "-", url }
-  local output = vim.fn.systemlist(cmd)
-  vim.cmd("new") -- open a new buffer
-  vim.api.nvim_buf_set_lines(0, 0, -1, false, output)
-  vim.bo.buftype = ""
-  vim.bo.filetype = "markdown"
-  print("Fetched: " .. url)
-end, { nargs = 1 })
+-- vim.api.nvim_create_user_command("FetchURL", function(opts)
+--   local url = opts.args
+--   if url == "" then
+--     print("Usage: :FetchURL https://example.com")
+--     return
+--   end
+--   local tmp = vim.fn.tempname()
+--   -- Uses env HTTP_PROXY/HTTPS_PROXY automatically
+--   local cmd = { "curl", "-L", "-sS", "-D", "-", url }
+--   local output = vim.fn.systemlist(cmd)
+--   vim.cmd("new") -- open a new buffer
+--   vim.api.nvim_buf_set_lines(0, 0, -1, false, output)
+--   vim.bo.buftype = ""
+--   vim.bo.filetype = "markdown"
+--   print("Fetched: " .. url)
+-- end, { nargs = 1 })

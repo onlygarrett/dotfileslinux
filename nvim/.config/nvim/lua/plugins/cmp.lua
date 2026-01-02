@@ -74,6 +74,24 @@ return {
       { name = "buffer", group_index = 2 },
     }))
 
+    -- Add luasnip snippet expansion if not present
+    opts.snippet = opts.snippet or {}
+    opts.snippet.expand = opts.snippet.expand or function(args)
+      require("luasnip").lsp_expand(args.body)
+    end
+
+    -- Ensure luasnip source is available
+    local has_luasnip = false
+    for _, s in ipairs(opts.sources) do
+      if s and s.name == "luasnip" then
+        has_luasnip = true
+        break
+      end
+    end
+    if not has_luasnip then
+      table.insert(opts.sources, { name = "luasnip", group_index = 2 })
+    end
+
     -- Disable preselection and enforce noselect in completeopt
     opts.preselect = cmp.PreselectMode.None
     opts.completion = opts.completion or {}

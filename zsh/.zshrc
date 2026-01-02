@@ -72,6 +72,8 @@ alias lg="lazygit"
 alias ld="sudo lazydocker"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias python='/usr/bin/python3'
+alias wezterm='flatpak run org.wezfurlong.wezterm'
+alias wz='flatpak run org.wezfurlong.wezterm'
 # alias y='yazi'
 
 # fzf

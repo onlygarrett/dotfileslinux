@@ -15,22 +15,16 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
-  rocks = {
-    enabled = false, -- disable rocks
-  },
   spec = {
-    {
-      "LazyVim/LazyVim",
-      import = "lazyvim.plugins",
-    }, -- LazyVim config
-    {
-      import = "plugins",
-    }, -- Your personal plugins
-    -- { import = "plugins.colorschemes" },
+    { "LazyVim/LazyVim", import = "lazyvim.plugins" },
+    { import = "lazyvim.plugins.extras.coding.nvim-cmp" }, -- use nvim-cmp instead of blink
+    { import = "plugins.cmp_spec" }, -- ensure nvim-cmp declared
+    { import = "plugins" },
   },
+
   defaults = {
     lazy = false,
-    version = false,
+    version = nil,
   },
   checker = {
     enabled = true, -- check for plugin updates periodically
@@ -40,9 +34,7 @@ require("lazy").setup({
     rtp = {
       -- disable some rtp plugins
       disabled_plugins = {
-        "gzip", -- "matchit",
-        -- "matchparen",
-        -- "netrwPlugin",
+        "gzip",
         "tarPlugin",
         "tohtml",
         "tutor",

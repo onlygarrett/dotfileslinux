@@ -40,3 +40,14 @@ opt.splitbelow = true -- split horizontal window to the bottom
 
 -- turn off swapfile
 opt.swapfile = false
+
+-- Better diff experience in Neovim.
+opt.diffopt = {
+  "internal",
+  "filler",
+  "closeoff",
+  "context:12",
+  "algorithm:histogram",
+  -- See https://www.reddit.com/r/neovim/comments/1k24zgk/comment/moj5kxj/
+  -- "linematch:200",
+}
