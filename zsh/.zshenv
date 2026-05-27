@@ -16,3 +16,4 @@ export SAVEHIST=10000                   # Maximum events in history file
 # export HTTP_PROXY=http://proxy.host:3128
 # export HTTPS_PROXY=http://proxy.host:3128
 # export NO_PROXY=127.0.0.1,localhost,::1
+export PATH="/home/jee/development/flutter/bin:$PATH"

@@ -1,0 +1,85 @@
+use_default_settings: true
+
+server:
+  # Must be changed to something random if exposed, but fine for local
+  secret_key: "dev-local-secret-key-change-me"
+  limiter: false # CRITICAL: disables bot protection
+  public_instance: false # CRITICAL: allows private API usage
+  bind_address: "0.0.0.0"
+  port: 8080
+  image_proxy: true
+
+ui:
+  static_use_hash: false
+
+search:
+  safe_search: 0
+  autocomplete: "google"
+  default_lang: "all"
+  formats:
+    - html
+    - json # CRITICAL: Open WebUI needs JSON
+
+engines:
+  - name: google
+    engine: google
+    disabled: false
+  - name: bing
+    engine: bing
+    disabled: false
+  - name: duckduckgo
+    engine: duckduckgo
+    disabled: true
+  - name: github
+    engine: github
+    disabled: false
+  - name: brave
+    engine: brave
+    disabled: true
+
+outgoing:
+  request_timeout: 5.0
+  max_request_timeout: 10.0
+
+redis:
+  enabled: false
+
+general:
+  debug: false
+# use_default_settings: true
+#
+# server:
+#   secret_key: "CHANGE_ME_SUPER_SECRET_KEY"
+#   limiter: false
+#   public_instance: false
+#   bind_address: "0.0.0.0"
+#   port: 8080
+#
+# ui:
+#   static_use_hash: false
+#
+# search:
+#   safe_search: 0
+#   autocomplete: ""
+#   default_lang: "all"
+#
+# engines:
+#   - name: google
+#     disabled: false
+#   - name: bing
+#     disabled: false
+#   - name: duckduckgo
+#     disabled: false
+#   - name: github
+#     disabled: false
+#   - name: stackoverflow
+#     disabled: false
+#
+# outgoing:
+#   request_timeout: 5.0
+#
+# redis:
+#   enabled: false
+#
+# general:
+#   enable_metrics: false

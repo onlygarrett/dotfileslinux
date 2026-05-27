@@ -18,6 +18,7 @@ require("lazy").setup({
   spec = {
     { "LazyVim/LazyVim", import = "lazyvim.plugins" },
     { import = "lazyvim.plugins.extras.coding.nvim-cmp" }, -- use nvim-cmp instead of blink
+    { import = "lazyvim.plugins.extras.lang.python" }, -- Python language support
     { import = "plugins.cmp_spec" }, -- ensure nvim-cmp declared
     { import = "plugins" },
   },

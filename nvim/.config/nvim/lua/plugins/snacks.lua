@@ -1,7 +1,39 @@
 return {
   {
     "folke/snacks.nvim",
-    -- merge your settings into LazyVim’s defaults
+    keys = {
+      {
+        "<leader>e",
+        function()
+          Snacks.picker.explorer({ cwd = vim.uv.cwd() })
+        end,
+        desc = "Explorer (cwd)",
+      },
+      {
+        "<leader>E",
+        function()
+          local root = Snacks.git.get_root() or vim.uv.cwd()
+          Snacks.picker.explorer({ cwd = root })
+        end,
+        desc = "Explorer (root)",
+      },
+      {
+        "<leader>sg",
+        function()
+          Snacks.picker.grep({ cwd = vim.uv.cwd() })
+        end,
+        desc = "Grep (cwd)",
+      },
+      {
+        "<leader>sG",
+        function()
+          local root = Snacks.git.get_root() or vim.uv.cwd()
+          Snacks.picker.grep({ cwd = root })
+        end,
+        desc = "Grep (root)",
+      },
+    },
+    -- merge your settings into LazyVim's defaults
     opts = function(_, opts)
       opts.dashboard = vim.tbl_deep_extend("force", opts.dashboard or {}, {
         pane_gap = 20,
@@ -134,7 +166,18 @@ return {
         sources = {
           files = { hidden = true },
           grep = { hidden = true },
-          explorer = { hidden = true },
+          explorer = {
+            hidden = true,
+            layout = {
+              preset = "sidebar",
+              preview = false,
+              layout = {
+                width = 40,
+                min_width = 40,
+                max_width = 40,
+              },
+            },
+          },
         },
       })
 
@@ -156,6 +199,7 @@ return {
 
       vim.api.nvim_set_hl(0, "SnacksDashboardKey", { fg = "#5ceef6" })
       vim.api.nvim_set_hl(0, "SnacksDashboardTitle", { fg = "#c49aee" })
+      vim.api.nvim_set_hl(0, "SnacksPickerGitStatusUntracked", { link = "Added" })
     end,
   },
 }

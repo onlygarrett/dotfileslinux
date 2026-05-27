@@ -7,6 +7,6 @@ stdbuf -oL udevadm monitor --udev --subsystem-match=drm --subsystem-match=input 
   if echo "$line" | grep -qi "lid\|drm"; then
     echo "$(date): Event detected: $line" >>/tmp/monitor-switch.log
     sleep 0.5
-    ~/. config/hypr/scripts/MonitorSwitch.sh
+    ~/.config/hypr/scripts/MonitorSwitch.sh
   fi
 done

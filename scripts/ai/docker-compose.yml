@@ -1,0 +1,23 @@
+services:
+  searxng:
+    image: searxng/searxng:latest
+    container_name: searxng
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./searxng/settings.yml:/etc/searxng/settings.yml:ro
+    environment:
+      - SEARXNG_SETTINGS_PATH=/etc/searxng/settings.yml
+    networks:
+      - llm-net
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - SETGID
+      - SETUID
+
+networks:
+  llm-net:
+    driver: bridge

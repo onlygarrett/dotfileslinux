@@ -32,7 +32,26 @@ return {
         lualine_b = { "branch", "diff", "diagnostics" },
         lualine_c = { "filename", "harpoon2" },
 
-        lualine_x = { "encoding", "fileformat", "filetype" },
+        lualine_x = {
+          {
+            function()
+              -- Check if opencode is loaded
+              local ok, opencode = pcall(require, "opencode")
+              if ok and opencode.statusline then
+                return opencode.statusline()
+              end
+              return ""
+            end,
+            cond = function()
+              local ok, opencode = pcall(require, "opencode")
+              return ok and opencode.statusline and opencode.statusline() ~= ""
+            end,
+            color = { fg = "#89b4fa" },
+          },
+          "encoding",
+          "fileformat",
+          "filetype",
+        },
         lualine_y = { "progress" },
         lualine_z = { "location" },
       },

@@ -38,7 +38,7 @@ palette = 13=#d2a6ff
 palette = 14=#95e6cb
 palette = 15=#ffffff
 font-size = 9
-keybind = page_up=scroll_page_up
-keybind = page_down=scroll_page_down
+keybind = ctrl+page_up=scroll_page_up
+keybind = ctrl+page_down=scroll_page_down
 keybind = global:cmd+grave_accent=toggle_quick_terminal
 keybind = ctrl+shift+k=goto_split:next

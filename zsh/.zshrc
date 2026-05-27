@@ -37,7 +37,8 @@ DISABLE_MAGIC_FUNCTIONS=true
 # completion using arrow keys (based on history)
 bindkey '^[[A' history-search-backward
 bindkey '^[[B' history-search-forward
-
+bindkey "^a" beginning-of-line
+bindkey "^e" end-of-line
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
@@ -58,6 +59,11 @@ alias c="clear"
 alias ..="cd .."
 alias syu="sudo dnf upgrade"
 alias syi="sudo dnf install"
+alias cat="bat"
+alias fk="sudo !!"
+alias dco="docker compose"
+alias dps="docker ps"
+
 
 alias zshconfig="source ~/.zshrc"
 alias ls="eza -a --icons --git"
@@ -67,6 +73,9 @@ alias lt='eza -@alT --color=always --git'
 alias llt="tree"
 alias lr='eza -alg --sort=modified --color=always --group-directories-first --git'
 alias ide='bash ~/.config/scripts/__tmux_ide.sh'
+alias v='nvim'
+alias grep='grep --color=auto'
+alias sensors='sensors | bat -l cpuinfo -p'
 alias vh="nvim"
 alias lg="lazygit"
 alias ld="sudo lazydocker"
@@ -87,6 +96,18 @@ function y() {
         builtin cd -- "$cwd"
     fi
     rm -f -- "$tmp"
+}
+# tat: tmux attach
+function tat {
+  name=$(basename `pwd` | sed -e 's/\.//g')
+
+  if tmux ls 2>&1 | grep "$name"; then
+    tmux attach -t "$name"
+  elif [ -f .envrc ]; then
+    direnv exec / tmux new-session -s "$name"
+  else
+    tmux new-session -s "$name"
+  fi
 }
 # Example aliases
 source ~/powerlevel10k/powerlevel10k.zsh-theme
@@ -110,3 +131,40 @@ export PATH=$PATH:$HOME/.cargo/bin:$HOME/go/bin
 
 # opencode
 export PATH=/home/jee/.opencode/bin:$PATH
+autoload -U compinit; compinit
+
+# Added by LM Studio CLI tool (lms)
+export PATH="$PATH:/home/jee/.lmstudio/bin"
+#compdef opencode
+###-begin-opencode-completions-###
+#
+# yargs command completion script
+#
+# Installation: opencode completion >> ~/.zshrc
+#    or opencode completion >> ~/.zprofile on OSX.
+#
+_opencode_yargs_completions()
+{
+  local reply
+  local si=$IFS
+  IFS=$'
+' reply=($(COMP_CWORD="$((CURRENT-1))" COMP_LINE="$BUFFER" COMP_POINT="$CURSOR" opencode --get-yargs-completions "${words[@]}"))
+  IFS=$si
+  if [[ ${#reply} -gt 0 ]]; then
+    _describe 'values' reply
+  else
+    _default
+  fi
+}
+if [[ "'${zsh_eval_context[-1]}" == "loadautofunc" ]]; then
+  _opencode_yargs_completions "$@"
+else
+  compdef _opencode_yargs_completions opencode
+fi
+###-end-opencode-completions-###
+
+
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv zsh)"
+
+# Android AVD Home (for XDG compliance on Linux)
+export ANDROID_AVD_HOME=~/.config/.android/avd

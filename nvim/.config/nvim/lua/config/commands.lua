@@ -50,3 +50,6 @@ f.cmd("ExtractZip", "lua require('config.functions').extract_zip(<f-args>)", { n
 
 -- remove blank lines
 f.cmd("Nobl", "g/^\\s*$/d", { desc = "remove blank lines" })
+
+-- Poetry virtualenv activation
+f.cmd("PoetryActivate", "lua require('config.python-poetry').activate_poetry_venv()", { desc = "Activate Poetry virtualenv" })
