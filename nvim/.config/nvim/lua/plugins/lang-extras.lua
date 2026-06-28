@@ -69,9 +69,4 @@ return {
     "b0o/SchemaStore.nvim",
     lazy = true,
   },
-  {
-    "jose-elias-alvarez/typescript.nvim",
-    ft = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
-    opts = {},
-  },
 }

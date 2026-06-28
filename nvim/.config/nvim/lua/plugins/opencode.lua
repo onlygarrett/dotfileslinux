@@ -1,290 +1,290 @@
 return {
-  {
-    "nickjvandyke/opencode.nvim",
-    version = "*", -- Latest stable release
-    dependencies = {
-      {
-        ---@module "snacks"
-        "folke/snacks.nvim",
-        optional = true,
-        opts = function(_, opts)
-          opts = opts or {}
-
-          -- Enhance input for ask() with completions
-          opts.input = opts.input or {}
-
-          -- Enhance picker for select()
-          opts.picker = vim.tbl_deep_extend("force", opts.picker or {}, {
-            actions = {
-              opencode_send = function(...)
-                return require("opencode").snacks_picker_send(...)
-              end,
-            },
-            win = {
-              input = {
-                keys = {
-                  ["<a-a>"] = { "opencode_send", mode = { "n", "i" } },
-                },
-              },
-            },
-          })
-
-          return opts
-        end,
-      },
-    },
-    cmd = { "OpenCode", "OpenCodeToggle" },
-    keys = {
-      -- Core interaction keymaps
-      {
-        "<Leader>oa",
-        function()
-          require("opencode").ask("@this: ", { submit = false })
-        end,
-        desc = "Ask OpenCode…",
-        mode = { "n", "x" },
-      },
-      {
-        "<Leader>oA",
-        function()
-          require("opencode").ask("", { submit = false })
-        end,
-        desc = "Ask OpenCode (no context)",
-        mode = { "n", "x" },
-      },
-      {
-        "<Leader>ox",
-        function()
-          require("opencode").select()
-        end,
-        desc = "OpenCode: Select prompt/command",
-        mode = { "n", "x" },
-      },
-
-      -- Operator mode for range selection
-      {
-        "go",
-        function()
-          return require("opencode").operator("@this ")
-        end,
-        desc = "Add range to OpenCode",
-        expr = true,
-        mode = { "n", "x" },
-      },
-      {
-        "goo",
-        function()
-          return require("opencode").operator("@this ") .. "_"
-        end,
-        desc = "Add line to OpenCode",
-        expr = true,
-        mode = "n",
-      },
-
-      -- Terminal toggle and management
-      {
-        "<Leader>oc",
-        function()
-          require("opencode").toggle()
-        end,
-        desc = "Toggle OpenCode terminal",
-        mode = { "n", "t" },
-      },
-      {
-        "<Leader>os",
-        function()
-          require("opencode").stop()
-        end,
-        desc = "Stop OpenCode",
-        mode = "n",
-      },
-
-      -- Scroll OpenCode messages from Neovim
-      {
-        "<Leader>ou",
-        function()
-          require("opencode").command("session.half.page.up")
-        end,
-        desc = "Scroll OpenCode up",
-        mode = "n",
-      },
-      {
-        "<Leader>od",
-        function()
-          require("opencode").command("session.half.page.down")
-        end,
-        desc = "Scroll OpenCode down",
-        mode = "n",
-      },
-      {
-        "<Leader>oG",
-        function()
-          require("opencode").command("session.last")
-        end,
-        desc = "Go to last OpenCode message",
-        mode = "n",
-      },
-      {
-        "<Leader>og",
-        function()
-          require("opencode").command("session.first")
-        end,
-        desc = "Go to first OpenCode message",
-        mode = "n",
-      },
-
-      -- Session management
-      {
-        "<Leader>ol",
-        function()
-          require("opencode").command("session.list")
-        end,
-        desc = "List OpenCode sessions",
-        mode = "n",
-      },
-      {
-        "<Leader>on",
-        function()
-          require("opencode").command("session.new")
-        end,
-        desc = "New OpenCode session",
-        mode = "n",
-      },
-      {
-        "<Leader>oi",
-        function()
-          require("opencode").command("session.interrupt")
-        end,
-        desc = "Interrupt OpenCode",
-        mode = "n",
-      },
-    },
-    config = function()
-      ---@type opencode.Opts
-      vim.g.opencode_opts = {
-        -- Server configuration: reuse same server across sessions
-        server = {
-          start = function()
-            require("opencode.terminal").toggle("opencode --port")
-          end,
-          stop = function()
-            require("opencode.terminal").stop()
-          end,
-          toggle = function()
-            require("opencode.terminal").toggle("opencode --port")
-          end,
-        },
-
-        -- Events configuration
-        events = {
-          enabled = true,
-          reload = true, -- Auto-reload files when OpenCode edits them
-        },
-
-        -- Custom prompts for common workflows
-        prompts = {
-          -- Code quality
-          review = {
-            prompt = "Review @this for correctness, readability, and best practices",
-            contexts = { "this" },
-          },
-          optimize = {
-            prompt = "Optimize @this for performance and readability",
-            contexts = { "this" },
-          },
-          document = {
-            prompt = "Add comprehensive documentation comments to @this",
-            contexts = { "this" },
-          },
-
-          -- Testing
-          test = {
-            prompt = "Write comprehensive tests for @this",
-            contexts = { "this" },
-          },
-
-          -- Debugging
-          explain = {
-            prompt = "Explain @this and its context in detail",
-            contexts = { "this" },
-          },
-          diagnostics = {
-            prompt = "Explain these diagnostics: @diagnostics",
-            contexts = { "diagnostics" },
-          },
-          fix = {
-            prompt = "Fix these diagnostics: @diagnostics",
-            contexts = { "diagnostics" },
-          },
-
-          -- Git
-          diff = {
-            prompt = "Review this git diff for correctness and readability: @diff",
-            contexts = { "diff" },
-          },
-          commit = {
-            prompt = "Generate a commit message for: @diff",
-            contexts = { "diff" },
-          },
-
-          -- Refactoring
-          refactor = {
-            prompt = "Refactor @this to improve code quality and maintainability",
-            contexts = { "this" },
-          },
-          implement = {
-            prompt = "Implement the following: @this",
-            contexts = { "this" },
-          },
-        },
-
-        -- Experimental LSP support
-        lsp = {
-          enabled = false, -- Set to true to try experimental LSP features
-        },
-      }
-
-      vim.o.autoread = true -- Required for opts.events.reload
-
-      -- Make OpenCode buffer unlisted so it doesn't show in lualine
-      vim.api.nvim_create_autocmd("TermOpen", {
-        pattern = "term://*opencode*",
-        callback = function(event)
-          vim.api.nvim_buf_set_option(event.buf, "buflisted", false)
-        end,
-      })
-
-      -- Auto-select last session when server connects
-      vim.api.nvim_create_autocmd("User", {
-        pattern = "OpencodeEvent:server.connected",
-        callback = function()
-          require("opencode").command("session.last")
-        end,
-      })
-
-      -- Handle OpenCode events
-      vim.api.nvim_create_autocmd("User", {
-        pattern = "OpencodeEvent:*",
-        callback = function(args)
-          ---@type opencode.server.Event
-          local event = args.data.event
-
-          -- Notify on session idle (finished responding)
-          if event.type == "session.idle" then
-            vim.notify("OpenCode finished responding", vim.log.levels.INFO)
-          end
-
-          -- Handle permission requests
-          if event.type == "permission.request" then
-            vim.notify("OpenCode is requesting permission", vim.log.levels.WARN)
-          end
-        end,
-      })
-
-      -- Stop OpenCode when exiting vim
-      vim.api.nvim_create_autocmd("VimLeavePre", {
-        callback = require("opencode").stop,
-      })
-    end,
-  },
+  -- {
+  --   "nickjvandyke/opencode.nvim",
+  --   version = "*", -- Latest stable release
+  --   dependencies = {
+  --     {
+  --       ---@module "snacks"
+  --       "folke/snacks.nvim",
+  --       optional = true,
+  --       opts = function(_, opts)
+  --         opts = opts or {}
+  --
+  --         -- Enhance input for ask() with completions
+  --         opts.input = opts.input or {}
+  --
+  --         -- Enhance picker for select()
+  --         opts.picker = vim.tbl_deep_extend("force", opts.picker or {}, {
+  --           actions = {
+  --             opencode_send = function(...)
+  --               return require("opencode").snacks_picker_send(...)
+  --             end,
+  --           },
+  --           win = {
+  --             input = {
+  --               keys = {
+  --                 ["<a-a>"] = { "opencode_send", mode = { "n", "i" } },
+  --               },
+  --             },
+  --           },
+  --         })
+  --
+  --         return opts
+  --       end,
+  --     },
+  --   },
+  --   cmd = { "OpenCode", "OpenCodeToggle" },
+  --   keys = {
+  --     -- Core interaction keymaps
+  --     {
+  --       "<Leader>oa",
+  --       function()
+  --         require("opencode").ask("@this: ", { submit = false })
+  --       end,
+  --       desc = "Ask OpenCode…",
+  --       mode = { "n", "x" },
+  --     },
+  --     {
+  --       "<Leader>oA",
+  --       function()
+  --         require("opencode").ask("", { submit = false })
+  --       end,
+  --       desc = "Ask OpenCode (no context)",
+  --       mode = { "n", "x" },
+  --     },
+  --     {
+  --       "<Leader>ox",
+  --       function()
+  --         require("opencode").select()
+  --       end,
+  --       desc = "OpenCode: Select prompt/command",
+  --       mode = { "n", "x" },
+  --     },
+  --
+  --     -- Operator mode for range selection
+  --     {
+  --       "go",
+  --       function()
+  --         return require("opencode").operator("@this ")
+  --       end,
+  --       desc = "Add range to OpenCode",
+  --       expr = true,
+  --       mode = { "n", "x" },
+  --     },
+  --     {
+  --       "goo",
+  --       function()
+  --         return require("opencode").operator("@this ") .. "_"
+  --       end,
+  --       desc = "Add line to OpenCode",
+  --       expr = true,
+  --       mode = "n",
+  --     },
+  --
+  --     -- Terminal toggle and management
+  --     {
+  --       "<Leader>oc",
+  --       function()
+  --         require("opencode").toggle()
+  --       end,
+  --       desc = "Toggle OpenCode terminal",
+  --       mode = { "n", "t" },
+  --     },
+  --     {
+  --       "<Leader>os",
+  --       function()
+  --         require("opencode").stop()
+  --       end,
+  --       desc = "Stop OpenCode",
+  --       mode = "n",
+  --     },
+  --
+  --     -- Scroll OpenCode messages from Neovim
+  --     {
+  --       "<Leader>ou",
+  --       function()
+  --         require("opencode").command("session.half.page.up")
+  --       end,
+  --       desc = "Scroll OpenCode up",
+  --       mode = "n",
+  --     },
+  --     {
+  --       "<Leader>od",
+  --       function()
+  --         require("opencode").command("session.half.page.down")
+  --       end,
+  --       desc = "Scroll OpenCode down",
+  --       mode = "n",
+  --     },
+  --     {
+  --       "<Leader>oG",
+  --       function()
+  --         require("opencode").command("session.last")
+  --       end,
+  --       desc = "Go to last OpenCode message",
+  --       mode = "n",
+  --     },
+  --     {
+  --       "<Leader>og",
+  --       function()
+  --         require("opencode").command("session.first")
+  --       end,
+  --       desc = "Go to first OpenCode message",
+  --       mode = "n",
+  --     },
+  --
+  --     -- Session management
+  --     {
+  --       "<Leader>ol",
+  --       function()
+  --         require("opencode").command("session.list")
+  --       end,
+  --       desc = "List OpenCode sessions",
+  --       mode = "n",
+  --     },
+  --     {
+  --       "<Leader>on",
+  --       function()
+  --         require("opencode").command("session.new")
+  --       end,
+  --       desc = "New OpenCode session",
+  --       mode = "n",
+  --     },
+  --     {
+  --       "<Leader>oi",
+  --       function()
+  --         require("opencode").command("session.interrupt")
+  --       end,
+  --       desc = "Interrupt OpenCode",
+  --       mode = "n",
+  --     },
+  --   },
+  --   config = function()
+  --     ---@type opencode.Opts
+  --     vim.g.opencode_opts = {
+  --       -- Server configuration: reuse same server across sessions
+  --       server = {
+  --         start = function()
+  --           require("opencode.terminal").toggle("opencode --port")
+  --         end,
+  --         stop = function()
+  --           require("opencode.terminal").stop()
+  --         end,
+  --         toggle = function()
+  --           require("opencode.terminal").toggle("opencode --port")
+  --         end,
+  --       },
+  --
+  --       -- Events configuration
+  --       events = {
+  --         enabled = true,
+  --         reload = true, -- Auto-reload files when OpenCode edits them
+  --       },
+  --
+  --       -- Custom prompts for common workflows
+  --       prompts = {
+  --         -- Code quality
+  --         review = {
+  --           prompt = "Review @this for correctness, readability, and best practices",
+  --           contexts = { "this" },
+  --         },
+  --         optimize = {
+  --           prompt = "Optimize @this for performance and readability",
+  --           contexts = { "this" },
+  --         },
+  --         document = {
+  --           prompt = "Add comprehensive documentation comments to @this",
+  --           contexts = { "this" },
+  --         },
+  --
+  --         -- Testing
+  --         test = {
+  --           prompt = "Write comprehensive tests for @this",
+  --           contexts = { "this" },
+  --         },
+  --
+  --         -- Debugging
+  --         explain = {
+  --           prompt = "Explain @this and its context in detail",
+  --           contexts = { "this" },
+  --         },
+  --         diagnostics = {
+  --           prompt = "Explain these diagnostics: @diagnostics",
+  --           contexts = { "diagnostics" },
+  --         },
+  --         fix = {
+  --           prompt = "Fix these diagnostics: @diagnostics",
+  --           contexts = { "diagnostics" },
+  --         },
+  --
+  --         -- Git
+  --         diff = {
+  --           prompt = "Review this git diff for correctness and readability: @diff",
+  --           contexts = { "diff" },
+  --         },
+  --         commit = {
+  --           prompt = "Generate a commit message for: @diff",
+  --           contexts = { "diff" },
+  --         },
+  --
+  --         -- Refactoring
+  --         refactor = {
+  --           prompt = "Refactor @this to improve code quality and maintainability",
+  --           contexts = { "this" },
+  --         },
+  --         implement = {
+  --           prompt = "Implement the following: @this",
+  --           contexts = { "this" },
+  --         },
+  --       },
+  --
+  --       -- Experimental LSP support
+  --       lsp = {
+  --         enabled = false, -- Set to true to try experimental LSP features
+  --       },
+  --     }
+  --
+  --     vim.o.autoread = true -- Required for opts.events.reload
+  --
+  --     -- Make OpenCode buffer unlisted so it doesn't show in lualine
+  --     vim.api.nvim_create_autocmd("TermOpen", {
+  --       pattern = "term://*opencode*",
+  --       callback = function(event)
+  --         vim.api.nvim_buf_set_option(event.buf, "buflisted", false)
+  --       end,
+  --     })
+  --
+  --     -- Auto-select last session when server connects
+  --     vim.api.nvim_create_autocmd("User", {
+  --       pattern = "OpencodeEvent:server.connected",
+  --       callback = function()
+  --         require("opencode").command("session.last")
+  --       end,
+  --     })
+  --
+  --     -- Handle OpenCode events
+  --     vim.api.nvim_create_autocmd("User", {
+  --       pattern = "OpencodeEvent:*",
+  --       callback = function(args)
+  --         ---@type opencode.server.Event
+  --         local event = args.data.event
+  --
+  --         -- Notify on session idle (finished responding)
+  --         if event.type == "session.idle" then
+  --           vim.notify("OpenCode finished responding", vim.log.levels.INFO)
+  --         end
+  --
+  --         -- Handle permission requests
+  --         if event.type == "permission.request" then
+  --           vim.notify("OpenCode is requesting permission", vim.log.levels.WARN)
+  --         end
+  --       end,
+  --     })
+  --
+  --     -- Stop OpenCode when exiting vim
+  --     vim.api.nvim_create_autocmd("VimLeavePre", {
+  --       callback = require("opencode").stop,
+  --     })
+  --   end,
+  -- },
 }
