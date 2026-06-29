@@ -2,7 +2,7 @@
 
 title = hacker
 desktop-notifications = false
-initial-window = false
+initial-window = true
 working-directory = home
 confirm-close-surface = false
 quit-after-last-window-closed = false
@@ -16,6 +16,8 @@ window-inherit-working-directory = false
 window-theme = dark
 theme = Ayu
 background = #0b0e14
+background-opacity = 0.85
+# background-image-opacity = 0.2
 foreground = #bfbdb6
 selection-background = #409fff
 selection-foreground = #0b0e14
@@ -37,8 +39,13 @@ palette = 12=#59c2ff
 palette = 13=#d2a6ff
 palette = 14=#95e6cb
 palette = 15=#ffffff
-font-size = 9
+font-family = "Iosevka Term"
+font-family-bold = "Iosevka Term Bold"
+font-family-italic = "Iosevka Term Italic"
+font-family-bold-italic = "Iosevka Term Bold Italic"
+font-size = 16
 keybind = ctrl+page_up=scroll_page_up
 keybind = ctrl+page_down=scroll_page_down
 keybind = global:cmd+grave_accent=toggle_quick_terminal
 keybind = ctrl+shift+k=goto_split:next
+config-file = ?auto/theme.ghostty
