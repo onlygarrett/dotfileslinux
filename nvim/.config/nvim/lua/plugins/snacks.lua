@@ -151,7 +151,7 @@ return {
                 padding = { 2, 2, 2, 2 },
                 gap = 5,
               },
-              { section = "terminal", cmd = "curl -s 'wttr.in/chicago'", gap = 5 },
+              { section = "terminal", cmd = "curl -s 'wttr.in/chicago?0'", gap = 5 },
             },
           },
         },

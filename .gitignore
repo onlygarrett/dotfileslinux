@@ -52,3 +52,9 @@ __pycache__/
 .aider.tags.cache.v4
 .aider.chat.history.md
 .aider.input.history
+
+# opencode
+.opencode/
+
+# serena
+.serena/
