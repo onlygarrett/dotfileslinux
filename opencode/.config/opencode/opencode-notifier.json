@@ -1,0 +1,16 @@
+{
+  "sound": false,
+  "notification": true,
+  "timeout": 5,
+  "showProjectName": true,
+  "suppressWhenFocused": true,
+  "linux": {
+    "grouping": true
+  },
+  "events": {
+    "permission": { "sound": false, "notification": true },
+    "complete":   { "sound": false, "notification": true },
+    "error":      { "sound": false, "notification": true },
+    "question":   { "sound": false, "notification": true }
+  }
+}

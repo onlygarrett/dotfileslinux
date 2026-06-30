@@ -6,7 +6,7 @@ fi
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
 neofetch --config ~/.config/neofetch/asdf/config3.conf -L
-
+task
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
@@ -63,6 +63,12 @@ alias cat="bat"
 alias fk="sudo !!"
 alias dco="docker compose"
 alias dps="docker ps"
+# Qwen3-Coder local server (podman container)
+alias qcup='qwen-coder-server.sh -d'              # start detached
+alias qcdown='podman stop qwen-coder'             # stop (auto-removes; container is --rm)
+alias qcps='podman ps --filter name=qwen-coder'   # status
+# JupyterLab (for jupyter-mcp-server)
+alias jlup='~/.venvs/jupyter/bin/jupyter lab --port 8888 --IdentityProvider.token "$(cat ~/.jupyter_token 2>/dev/null || echo myjupytertoken)" --ServerApp.disable_check_xsrf=True --no-browser'
 
 
 alias zshconfig="source ~/.zshrc"
@@ -129,8 +135,6 @@ export PATH=$PATH:$HOME/.cargo/bin:$HOME/go/bin
 
 . "$HOME/.config/local/share/../bin/env"
 
-# opencode
-export PATH=/home/jee/.opencode/bin:$PATH
 autoload -U compinit; compinit
 
 # Added by LM Studio CLI tool (lms)
@@ -168,3 +172,13 @@ eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv zsh)"
 
 # Android AVD Home (for XDG compliance on Linux)
 export ANDROID_AVD_HOME=~/.config/.android/avd
+
+# Qwen Code PATH block begin
+export PATH='/home/jee/.local/bin':$PATH
+# Qwen Code PATH block end
+
+# Pi
+export PATH="/home/jee/.config/local/share/pi-node/node-v22.23.0-linux-x64/bin:$PATH"
+
+# Local secrets (NOT in dotfiles repo) — e.g. TAVILY_API_KEY for opencode
+[ -f ~/.zsh_secrets ] && source ~/.zsh_secrets

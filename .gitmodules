@@ -1,0 +1,3 @@
+[submodule "opencode/.config/opencode/agent-skills"]
+	path = opencode/.config/opencode/agent-skills
+	url = https://github.com/addyosmani/agent-skills.git

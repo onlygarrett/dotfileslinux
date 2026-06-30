@@ -1,0 +1,162 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "lsp": true,
+  "small_model": "ollama/qwen3:8b",
+  "skills": {
+    "paths": [
+      "~/.config/opencode/agent-skills/skills"
+    ]
+  },
+  "provider": {
+    "ollama": {
+      "npm": "@ai-sdk/openai-compatible",
+      "models": {
+        "qwen3:14b": {
+          "name": "Qwen3",
+          "limit": {
+            "context": 131072,
+            "output": 8192
+          }
+        },
+        "qwen3:8b": {
+          "name": "Qwen3-8B",
+          "limit": {
+            "context": 40960,
+            "output": 8192
+          }
+        }
+      },
+      "name": "Ollama (local)",
+      "options": {
+        "baseURL": "http://localhost:11434/v1"
+      }
+    },
+    "llama-cpp": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "llama.cpp (local)",
+      "options": {
+        "baseURL": "http://127.0.0.1:8080/v1"
+      },
+      "models": {
+        "qwen3-coder-30b": {
+          "name": "Qwen3-Coder-30B (local)",
+          "limit": {
+            "context": 65536,
+            "output": 16384
+          }
+        }
+      }
+    }
+  },
+  "permission": {
+    "*": "allow",
+    "read": {
+      "*": "allow",
+      "*.env": "deny",
+      "*.env.*": "deny",
+      "*.env.example": "allow"
+    },
+    "external_directory": {
+      "*": "allow"
+    },
+    "bash": {
+      "*": "allow",
+      "rm *": "ask",
+      "rmdir *": "ask",
+      "sudo *": "ask",
+      "git push *": "ask",
+      "git reset --hard*": "ask",
+      "git clean *": "ask",
+      "git checkout -- *": "ask",
+      "dd *": "ask",
+      "mkfs*": "ask",
+      "chmod -R *": "ask",
+      "chown -R *": "ask",
+      "truncate *": "ask",
+      "shutdown*": "ask",
+      "reboot*": "ask",
+      "> *": "ask"
+    }
+  },
+  "model": "github-copilot/claude-sonnet-4.6",
+  "mcp": {
+    "tavily": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "tavily-mcp@latest"
+      ],
+      "enabled": true,
+      "environment": {
+        "TAVILY_API_KEY": "{env:TAVILY_API_KEY}"
+      }
+    },
+    "serena": {
+      "type": "local",
+      "enabled": true,
+      "timeout": 60000,
+      "command": [
+        "/home/jee/.config/local/bin/uvx",
+        "--from",
+        "serena-agent",
+        "serena",
+        "start-mcp-server",
+        "--context",
+        "ide",
+        "--project-from-cwd"
+      ],
+      "environment": {
+        "PYTHONUNBUFFERED": "1"
+      }
+    },
+    "huggingface": {
+      "type": "remote",
+      "url": "https://huggingface.co/mcp",
+      "enabled": true,
+      "headers": {
+        "Authorization": "Bearer {env:HF_TOKEN}"
+      }
+    },
+    "jupyter": {
+      "type": "local",
+      "enabled": true,
+      "command": [
+        "/home/jee/.config/local/bin/uvx",
+        "jupyter-mcp-server@latest"
+      ],
+      "environment": {
+        "JUPYTER_URL": "http://localhost:8888",
+        "JUPYTER_TOKEN": "{env:JUPYTER_TOKEN}",
+        "MCP_TOKEN": "{env:JUPYTER_MCP_TOKEN}",
+        "ALLOW_IMG_OUTPUT": "true"
+      }
+    }
+  },
+  "plugin": [
+    "@tarquinen/opencode-dcp@latest",
+    "@mohak34/opencode-notifier@latest"
+  ],
+  "tools": {
+    "serena*": false,
+    "huggingface*": false,
+    "jupyter*": false
+  },
+  "agent": {
+    "code": {
+      "description": "Code understanding & refactoring using Serena's semantic/LSP tools.",
+      "mode": "primary",
+      "tools": {
+        "serena*": true
+      }
+    },
+    "ml": {
+      "description": "ML work: search Hugging Face models/datasets/papers and run Jupyter notebooks.",
+      "mode": "primary",
+      "tools": {
+        "huggingface*": true,
+        "jupyter*": true
+      }
+    }
+  }
+}

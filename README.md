@@ -66,6 +66,10 @@ stow -R packagename
 # Clone dotfiles
 git clone https://github.com/onlygarrett/dotfiles.git ~/dotfiles
 
+# Initialize submodules (required for packages like opencode)
+cd ~/dotfiles
+git submodule update --init --recursive
+
 # Stow everything
 cd ~/dotfiles
 stow */
@@ -93,3 +97,34 @@ stow newapp
 git add newapp
 git commit -m "Add newapp configuration"
 git push
+
+## Packages with git submodules
+
+Some packages include nested git repositories tracked as submodules.
+After cloning, always initialize them before stowing:
+
+```bash
+git submodule update --init --recursive
+```
+
+To update a submodule to its latest upstream commit:
+
+```bash
+git submodule update --remote opencode/.config/opencode/agent-skills
+git add opencode/.config/opencode/agent-skills
+git commit -m "chore: update agent-skills submodule"
+```
+
+### Packages using submodules
+
+| Package | Submodule | Upstream |
+|---------|-----------|----------|
+| `opencode` | `opencode/.config/opencode/agent-skills` | https://github.com/addyosmani/agent-skills |
+
+### Post-stow setup for opencode
+
+After stowing the `opencode` package, install its plugins:
+
+```bash
+cd ~/.config/opencode && npm install
+```
